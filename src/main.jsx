@@ -1,60 +1,41 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom'
-import Layout from './Layout.jsx'
-import About from './Conponents/About/About.jsx'
-import Home from './Conponents/Home/Home.jsx'
-import Github , {githubInfoLoader} from './Conponents/Github/Github.jsx'
-import Login from './Conponents/Login/Login.jsx'
-import Register from './Conponents/Register/Register.jsx'
-
-
- 
-
-// const router = createBrowserRouter([
-//    {
-//     path : '/',
-//     element : <Layout/>,
-//     children : [
-
-//       {
-//         path : '',
-//         element : <Home />
-//       },
-
-//       {
-//         path : 'about',
-//        element : <About />
-      
-//     },
-//     {
-//       path : 'contact',
-//      element : <Contact />
-    
-//   }
-//     ]
-//    }
-// ])
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import "./index.css";
+import {
+  Route,
+  RouterProvider,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
+import Layout from "./Layout.jsx";
+import About from "./Conponents/About/About.jsx";
+import Home from "./Conponents/Home/Home.jsx";
+import Github, { githubInfoLoader } from "./Conponents/Github/Github.jsx";
+import Login from "./Conponents/Login/Login.jsx";
+import Register from "./Conponents/Register/Register.jsx";
+import { Provider } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import rootReducer from "./reducers/index.js";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />} >
-    <Route path="" element={<Home />} />
-    <Route path="about" element={<About />} />
-    <Route loader={githubInfoLoader} path="github" element={<Github />} />
-    <Route path="login" element={<Login />} />
-    <Route path="register" element={<Register />} />
-
-
- </Route>
+    <Route path="/" element={<Layout />}>
+      <Route path="" element={<Home />} />
+      {/* <Route path="about" element={<About />} /> */}
+      <Route loader={githubInfoLoader} path="github" element={<Github />} />
+      <Route path="login" element={<Login />} />
+      <Route path="register" element={<Register />} />
+    </Route>
   )
-)
+);
 
+const store = configureStore({ reducer: rootReducer });
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-   <RouterProvider router={router} />
-  </React.StrictMode>,
-)
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </React.StrictMode>
+);
