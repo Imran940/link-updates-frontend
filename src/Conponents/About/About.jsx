@@ -7,9 +7,13 @@ export default function About() {
   return (
     <div className="flex flex-col gap-10 items-center">
       <div className="border-2 rounded-md p-2 text-center md: w-1/2">
-        <a target="_blank" href={link} className="text-red-600 animate-pulse">
-          Click here to visit new update
-        </a>
+        {link ? (
+          <a target="_blank" href={link} className="text-red-600 animate-pulse">
+            Click here to visit new update
+          </a>
+        ) : (
+          "No update from the admin"
+        )}
       </div>
       <div className=" border-2  w-[400px] p-5 mx-auto rounded-lg">
         <div className="social-section flex flex-row content-center justify-start  gap-2  items-center mb-5">
