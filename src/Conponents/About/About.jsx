@@ -3,7 +3,9 @@ import { FaFacebook, FaInstagramSquare, FaTwitter } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 export default function About() {
-  const { link } = useSelector((state) => state.auth);
+  const {
+    notify_links: { link, facebook_link, instagram_link, twitter_link } = {},
+  } = useSelector((state) => state.auth);
   return (
     <div className="flex flex-col gap-10 items-center">
       <div className="border-2 rounded-md p-2 text-center md: w-1/2">
@@ -22,9 +24,17 @@ export default function About() {
           </div>
 
           <div className="social-text">
-            <h4 className="text-lg capitalize ">
-              this message is for facebook
-            </h4>
+            {facebook_link ? (
+              <a
+                href={facebook_link}
+                target="_blank"
+                className="text-lg capitalize  text-[#3b5998] "
+              >
+                Click here to visit the link on facebook
+              </a>
+            ) : (
+              "No link for the facebook"
+            )}
           </div>
         </div>
 
@@ -34,7 +44,17 @@ export default function About() {
           </div>
 
           <div className="social-text">
-            <h4 className="text-lg capitalize ">this message is for twitter</h4>
+            {twitter_link ? (
+              <a
+                href={twitter_link}
+                target="_blank"
+                className="text-lg capitalize text-[#00acee] "
+              >
+                Click here to visit the link on twitter
+              </a>
+            ) : (
+              "No link for the twitter"
+            )}
           </div>
         </div>
 
@@ -44,9 +64,17 @@ export default function About() {
           </div>
 
           <div className="social-text">
-            <h4 className="text-lg capitalize ">
-              this message is for instagram
-            </h4>
+            {instagram_link ? (
+              <a
+                href={instagram_link}
+                target="_blank"
+                className="text-lg capitalize text-[#e95950]"
+              >
+                Click here to visit the link on instagram
+              </a>
+            ) : (
+              "No link for the instagram"
+            )}
           </div>
         </div>
       </div>
