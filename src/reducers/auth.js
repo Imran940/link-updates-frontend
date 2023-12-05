@@ -3,6 +3,7 @@ const initialState = {
   email: "",
   token: "",
   role: "",
+  notify_links: {},
 };
 
 export default function authReducer(state = initialState, action) {

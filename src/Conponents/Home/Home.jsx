@@ -83,7 +83,7 @@ export default function Home() {
           </form>
         </div>
       ) : (
-        <About />
+        role == "user" && <About />
       )}
     </div>
   );

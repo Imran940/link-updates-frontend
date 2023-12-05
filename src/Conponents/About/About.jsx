@@ -1,11 +1,46 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaFacebook, FaInstagramSquare, FaTwitter } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { getToken } from "firebase/messaging";
+import { app, messaging } from "../../firebase.js";
+import { saveTokenForNotiification } from "../../functions/user.js";
 
 export default function About() {
   const {
+    email,
+    token,
     notify_links: { link, facebook_link, instagram_link, twitter_link } = {},
   } = useSelector((state) => state.auth);
+
+  console.log({ token });
+  useEffect(() => {
+    if (navigator.serviceWorker && !token) {
+      navigator.serviceWorker
+        .register("firebase-messaging-sw.js")
+        .then((registration) => {
+          console.log("Registered Successfully");
+          Notification.requestPermission().then((permission) => {
+            if (permission == "granted" && !token) {
+              console.log("granted");
+              getToken(messaging, {
+                vapidKey:
+                  "BJtBH7Bh6VmG0GVMkYBmNB67TdxW3vmLTbW6vxubL3hmHOXRBbqMVjVGhLF8JHjkl1FXudwCRFHCdvOlDSI_OLk",
+              })
+                .then(async (token) => {
+                  //here we got the client token, we need to save this token on db so that we can use it on the server when
+                  // sending messages
+                  await saveTokenForNotiification({ token, email });
+                  alert("Notification set successfully");
+                  console.log(token);
+                })
+                .catch((err) => console.log(err));
+            }
+          });
+        })
+        .catch((err) => console.log("Registeration Error", err));
+    }
+  }, []);
+
   return (
     <div className="flex flex-col gap-10 items-center">
       <div className="border-2 rounded-md p-2 text-center md: w-1/2">

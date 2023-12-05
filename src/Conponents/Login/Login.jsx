@@ -23,7 +23,7 @@ function Login() {
       e.preventDefault();
       const response = await findUser(values);
       const data = response.data;
-      const result = { ...data.user, notify_links: data.notify_links };
+      const result = { ...data.user, notify_links: data.notify_links || {} };
       setValues(defaultValues);
       dispatch({
         type: "SIGN_IN_SUCCESS",
