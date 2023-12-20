@@ -7,6 +7,7 @@ import {
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
+  Navigate,
 } from "react-router-dom";
 import Layout from "./Layout.jsx";
 import About from "./Conponents/About/About.jsx";
@@ -28,6 +29,7 @@ const router = createBrowserRouter(
       <Route loader={githubInfoLoader} path="github" element={<Github />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Route>
   )
 );
