@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createUser } from "../../functions/auth";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const defaultValues = {
@@ -12,11 +12,13 @@ const defaultValues = {
 function Register() {
   const [values, setValues] = useState(defaultValues);
   const { role } = useSelector((state) => state.auth);
-  const isLogin = localStorage.getItem("isLogin");
+  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
+  const location = useLocation();
+  const invited_token = location.search.split("?token=")[1];
 
   useEffect(() => {
-    if (isLogin) {
+    if (accessToken) {
       navigate(role == "admin" ? "/" : "/about");
     }
   }, []);
@@ -24,7 +26,8 @@ function Register() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      await createUser(values);
+      console.log(invited_token);
+      await createUser({ ...values, ...(invited_token && { invited_token }) });
       setValues(defaultValues);
       navigate("/login");
       toast("Registration done successfully");

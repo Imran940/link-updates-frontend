@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { FaFacebook, FaInstagramSquare, FaTwitter } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getToken } from "firebase/messaging";
 import { app, messaging } from "../../firebase.js";
 import { saveTokenForNotiification } from "../../functions/user.js";
@@ -10,8 +10,10 @@ export default function About() {
     email,
     token,
     notify_links: { link, facebook_link, instagram_link, twitter_link } = {},
+    invited_by,
   } = useSelector((state) => state.auth);
-
+  const accessToken = localStorage.getItem("accessToken");
+  const dispatch = useDispatch();
   console.log({ token });
   useEffect(() => {
     if (navigator.serviceWorker && !token) {
@@ -29,9 +31,18 @@ export default function About() {
                 .then(async (token) => {
                   //here we got the client token, we need to save this token on db so that we can use it on the server when
                   // sending messages
-                  await saveTokenForNotiification({ token, email });
+                  await saveTokenForNotiification(
+                    { token, email, invited_by },
+                    accessToken
+                  );
                   alert("Notification set successfully");
-                  console.log(token);
+                  dispatch({
+                    type: "SIGN_IN_SUCCESS",
+                    payload: {
+                      token,
+                      tokenStatus: "on",
+                    },
+                  });
                 })
                 .catch((err) => console.log(err));
             }

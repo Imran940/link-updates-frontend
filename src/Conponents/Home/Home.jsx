@@ -7,12 +7,12 @@ import About from "../About/About";
 
 export default function Home() {
   const navigate = useNavigate();
-  const isLogin = localStorage.getItem("isLogin");
+  const accessToken = localStorage.getItem("accessToken");
   const { role, email, password } = useSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!isLogin) navigate("/login");
+    if (!accessToken) navigate("/login");
   }, []);
 
   const handlePushNotification = async (e) => {
@@ -25,7 +25,7 @@ export default function Home() {
         instagram_link: document.getElementById("instagram_link").value,
         twitter_link: document.getElementById("twitter_link").value,
       };
-      await pushNotification({ email, password, notify_link });
+      await pushNotification({ email, password, notify_link }, accessToken);
       toast("Sent the notification to all users", { type: "success" });
       document.getElementById("link").value = "";
       document.getElementById("facebook_link").value = "";

@@ -1,22 +1,38 @@
 import React, { useEffect } from "react";
 import Header from "./Conponents/Header/Header";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getUserInfo } from "./functions/auth";
 
 function Layout() {
-  const isLogin = localStorage.getItem("isLogin");
+  const accessToken = localStorage.getItem("accessToken");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
-    if (isLogin) {
-      const data =
-        localStorage.getItem("data") &&
-        JSON.parse(localStorage.getItem("data"));
-      dispatch({
-        type: "SIGN_IN_SUCCESS",
-        payload: data,
-      });
+    if (accessToken) {
+      (async () => {
+        try {
+          const response = await getUserInfo(accessToken);
+          const result = {
+            ...response.data.user,
+            notify_links: response.data.notify_links || {},
+            accessToken,
+            token: response.data.deviceToken,
+            tokenStatus: response.data.deviceTokenStatus,
+          };
+          dispatch({
+            type: "SIGN_IN_SUCCESS",
+            payload: result,
+          });
+        } catch (err) {
+          console.log(err);
+          localStorage.removeItem("accessToken");
+          toast(err.response.data, { type: "error" });
+          navigate("/login");
+        }
+      })();
     }
   }, []);
   return (

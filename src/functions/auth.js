@@ -5,3 +5,11 @@ export const createUser = (payload) =>
 
 export const findUser = (payload) =>
   axios.post(`${import.meta.env.VITE_API_SERVER_URL}/find-user`, payload);
+
+
+export const getUserInfo = (token) =>
+  axios.get(`${import.meta.env.VITE_API_SERVER_URL}/user-info`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });

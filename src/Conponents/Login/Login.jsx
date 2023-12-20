@@ -11,10 +11,10 @@ function Login() {
   const [values, setValues] = useState(defaultValues);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isLogin = localStorage.getItem("isLogin");
+  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    if (isLogin) {
+    if (accessToken) {
       navigate("/");
     }
   }, []);
@@ -23,14 +23,22 @@ function Login() {
       e.preventDefault();
       const response = await findUser(values);
       const data = response.data;
-      const result = { ...data.user, notify_links: data.notify_links || {} };
+      const accessToken = data.accessToken;
+      const result = {
+        ...data.user,
+        notify_links: data.notify_links || {},
+        accessToken,
+        token: data.deviceToken,
+        tokenStatus: response.data.deviceTokenStatus,
+      };
+
       setValues(defaultValues);
       dispatch({
         type: "SIGN_IN_SUCCESS",
         payload: result,
       });
-      localStorage.setItem("isLogin", "true");
-      localStorage.setItem("data", JSON.stringify(result));
+
+      localStorage.setItem("accessToken", accessToken);
       navigate("/");
       toast(`Welcome ${result.name}`, { type: "success" });
     } catch (err) {
