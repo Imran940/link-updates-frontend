@@ -26,8 +26,8 @@ const router = createBrowserRouter(
       <Route path="" element={<Home />} />
       {/* <Route path="about" element={<About />} /> */}
       <Route loader={githubInfoLoader} path="github" element={<Github />} />
-      <Route path="login" element={<Login />} />
-      <Route path="register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
     </Route>
   )
 );
